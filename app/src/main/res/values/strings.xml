@@ -3,4 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_taking_photos">TakingPhotosActivity</string>
     <string name="title_activity_viewing_photos">ViewingPhotosActivity</string>
+
+    <string name="take_photos">TAKE FOTOS</string>
+    <string name="view_photos">VIEW FOTOS</string>
 </resources>

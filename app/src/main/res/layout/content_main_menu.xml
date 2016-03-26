@@ -15,14 +15,14 @@
     <Button
         android:layout_width="fill_parent"
         android:padding="75dp"
-        android:text="TAKE FOTOS"
+        android:text="@string/take_photos"
         android:onClick="startTakingPhotos"
         android:layout_height="wrap_content"/>
 
     <Button
         android:layout_width="fill_parent"
         android:padding="75dp"
-        android:text="VIEW FOTOS"
+        android:text="@string/view_photos"
         android:onClick="startViewingPhotos"
         android:layout_height="wrap_content" />
 
