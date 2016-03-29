@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainMenu extends AppCompatActivity {
+public class  MainMenu extends AppCompatActivity {
     private final String TAG = "MainMenu";
 
     @Override
@@ -43,12 +43,14 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void startTakingPhotos(View fuck){
+        Log.d(TAG, "Transferring to taking photos function");
         startActivityForResult(new Intent(this, TakingPhotosActivity.class), 0);
-        Log.d(TAG,"Transferring to taking photos function");
+        //Log.d(TAG,"Transferring to taking photos function");
     }
 
     public void startViewingPhotos(View you){
-        startActivityForResult(new Intent(this, ViewingPhotosActivity.class), 0);
         Log.d(TAG,"Transferring to testing viewing photos function");
+        startActivityForResult(new Intent(this, ViewingPhotosActivity.class), 0);
+        //Log.d(TAG,"Transferring to testing viewing photos function");
     }
 }
