@@ -147,13 +147,34 @@ public class SurfaceViewTest extends Activity implements View.OnTouchListener {
         }
     }
 
-    public boolean onTouch(View v, MotionEvent event) {
+     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
-                points.add(new PointF(event.getX(),event.getY()));
 
+                PointF touchedPoint = new PointF(event.getX(),event.getY());
+                if(!isOverlap(points,touchedPoint)){
+                    points.add(touchedPoint);
+                }
                 return true;
         }
         return true;
+    }
+
+    /** Return true if the points are overlapped **/
+    private boolean isOverlap(List<PointF> points, PointF point) {
+        /* Traverse the list of points, return true if the point */
+        for(int i = 0; i < points.size(); i++){
+            if(withinBound(points.get(i),point)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /** A helper function to determine whether any given point is within any given point**/
+    private boolean withinBound(PointF p1, PointF p2) {
+        return p2.x >= p1.x-ba.getWidth() && p2.y >= p1.y - ba.getHeight() &&
+                p2.x <= p1.x + ba.getWidth() && p2.y <= p1.y + ba.getHeight();
     }
 }
