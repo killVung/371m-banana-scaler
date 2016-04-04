@@ -9,7 +9,10 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -18,6 +21,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,6 +34,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
     Point display;
 
     public void onCreate(Bundle savedInstanceState) {
+        Log.d("someError", "This is so strange, it never gets here");
         setup();
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -48,9 +54,15 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
                 (float) 100 / ba.getHeight());
 
         ba = scaleImage(ba, ratio);
-//        bg = BitmapFactory.decodeResource(getResources(), R.drawable.test);
         Intent picture = getIntent();
-        bg = picture.getParcelableExtra("BitmapImage");
+        Uri myUri = Uri.parse(picture.getExtras().getString("filename"));
+        try {
+            bg = MediaStore.Images.Media.getBitmap(getContentResolver(), myUri);
+        } catch (FileNotFoundException e) {
+            Log.e("someError", Log.getStackTraceString(e));
+        } catch (IOException e) {
+            Log.e("someError", Log.getStackTraceString(e));
+        }
 
         display = new Point();
         points = new LinkedList<>();
