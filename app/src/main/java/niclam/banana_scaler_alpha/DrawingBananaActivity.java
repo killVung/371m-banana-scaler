@@ -34,7 +34,6 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
     Point display;
 
     public void onCreate(Bundle savedInstanceState) {
-        Log.d("someError", "This is so strange, it never gets here");
         setup();
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
