@@ -37,7 +37,21 @@ public class CameraActivity extends AppCompatActivity {
         File file = getTempFile(getBaseContext());
         Intent intent = new Intent(getBaseContext(), DrawingBananaActivity.class);
         intent.putExtra("filename", Uri.fromFile(file).toString());
-        startActivity(intent);
+        if(resultCode == RESULT_CANCELED){
+            finish();
+        }else{
+            startActivity(intent);
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Bundle bundle = new Bundle();
+        Intent mIntent = new Intent();
+        mIntent.putExtras(bundle);
+        setResult(RESULT_CANCELED, mIntent);
+        super.onBackPressed();
     }
 
 }

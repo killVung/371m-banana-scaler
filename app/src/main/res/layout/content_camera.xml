@@ -12,8 +12,4 @@
     tools:context="niclam.banana_scaler_alpha.CameraActivity"
     tools:showIn="@layout/activity_camera">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!" />
 </RelativeLayout>
