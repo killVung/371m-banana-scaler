@@ -1,4 +1,4 @@
-package com.example.niclam.banana_scaler;
+package niclam.banana_scaler_alpha;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

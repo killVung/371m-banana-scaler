@@ -1,4 +1,4 @@
-package niclam.drawingbanana_playground;
+package niclam.banana_scaler_alpha;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,7 +9,10 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.PointF;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Display;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -18,11 +21,12 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-
-public class MainActivity extends Activity implements View.OnTouchListener {
+public class DrawingBananaActivity extends Activity implements View.OnTouchListener {
     FastRenderView renderView;
     Bitmap ba;
     Bitmap bg;
@@ -49,9 +53,15 @@ public class MainActivity extends Activity implements View.OnTouchListener {
                 (float) 100 / ba.getHeight());
 
         ba = scaleImage(ba, ratio);
-//        bg = BitmapFactory.decodeResource(getResources(), R.drawable.test);
         Intent picture = getIntent();
-        bg = picture.getParcelableExtra("BitmapImage");
+        Uri myUri = Uri.parse(picture.getExtras().getString("filename"));
+        try {
+            bg = MediaStore.Images.Media.getBitmap(getContentResolver(), myUri);
+        } catch (FileNotFoundException e) {
+            Log.e("someError", Log.getStackTraceString(e));
+        } catch (IOException e) {
+            Log.e("someError", Log.getStackTraceString(e));
+        }
 
         display = new Point();
         points = new LinkedList<>();

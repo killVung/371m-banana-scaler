@@ -5,8 +5,8 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.example.niclam.banana_scaler"
-        minSdkVersion 21
+        applicationId "niclam.banana_scaler_alpha"
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"

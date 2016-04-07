@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.niclam.banana_scaler.TakingPhotosActivity"
-    tools:showIn="@layout/activity_taking_photos">
+    tools:context="niclam.banana_scaler_alpha.DrawingBananaActivity"
+    tools:showIn="@layout/activity_drawing_banana">
 
 </RelativeLayout>
