@@ -23,7 +23,7 @@ public class MenuActivity extends AppCompatActivity {
 
     public void startViewFotos(View v){
         Log.d(TAG,"view!");
-        Toast.makeText(this,"Fuck you", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"Sorry, still building", Toast.LENGTH_SHORT).show();
     }
 
 }
