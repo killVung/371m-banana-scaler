@@ -41,15 +41,12 @@ public class CameraActivity extends AppCompatActivity {
             finish();
         }else{
             fuckingCheckPermission();
-
-
-
-
             startActivity(intent);
+            finish();
         }
 
     }
-    /** Fucking check the permission to make sure the fucking READ DISK is accessible **/
+    /** Fucking check the permission to make sure the fucking READ DISK is accessible on fucking Android 6.0 **/
     private void fuckingCheckPermission() {
 
     }
@@ -61,6 +58,7 @@ public class CameraActivity extends AppCompatActivity {
         mIntent.putExtras(bundle);
         setResult(RESULT_CANCELED, mIntent);
         super.onBackPressed();
+
     }
 
 }

@@ -20,6 +20,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -35,6 +36,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
 
     public void onCreate(Bundle savedInstanceState) {
         setup();
+        Toast.makeText(DrawingBananaActivity.this, "TAP Screen to put banana", Toast.LENGTH_SHORT).show();
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -42,6 +44,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         renderView = new FastRenderView(this);
         renderView.setOnTouchListener(this);
         setContentView(renderView);
+
     }
 
     private void setup() {
@@ -189,5 +192,16 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         //Check if the point is within the boundaries of the point
         return p2.x >= p1.x-ba.getWidth() && p2.y >= p1.y - ba.getHeight() &&
                 p2.x <= p1.x + ba.getWidth() && p2.y <= p1.y + ba.getHeight();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Bundle bundle = new Bundle();
+        Intent mIntent = new Intent();
+        mIntent.putExtras(bundle);
+        setResult(RESULT_CANCELED, mIntent);
+        super.onBackPressed();
+        finish();
+
     }
 }
