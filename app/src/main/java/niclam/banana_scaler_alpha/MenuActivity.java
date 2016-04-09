@@ -17,13 +17,18 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void startCaptureFotos(View c){
-        Log.d(TAG,"capture!");
+        Log.d(TAG, "capture!");
         startActivity(new Intent(this, CameraActivity.class));
     }
 
     public void startViewFotos(View v){
         Log.d(TAG,"view!");
         Toast.makeText(this,"Sorry, still building", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
 }
