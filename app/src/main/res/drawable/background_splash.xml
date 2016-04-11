@@ -4,10 +4,4 @@
     <item
         android:drawable="@color/colorKhaki"/>
 
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/banana"/>
-    </item>
-
 </layer-list>
