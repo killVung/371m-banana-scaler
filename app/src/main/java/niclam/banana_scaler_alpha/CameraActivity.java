@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -25,6 +26,7 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+        Toast.makeText(this,"Please capture the image you want to draw",Toast.LENGTH_SHORT).show();
 
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempFile(getBaseContext())));
@@ -37,6 +39,7 @@ public class CameraActivity extends AppCompatActivity {
         File file = getTempFile(getBaseContext());
         Intent intent = new Intent(getBaseContext(), DrawingBananaActivity.class);
         intent.putExtra("filename", Uri.fromFile(file).toString());
+        intent.putExtra("isCamera", true);
         if(resultCode == RESULT_CANCELED){
             finish();
         }else{

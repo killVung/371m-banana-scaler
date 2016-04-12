@@ -58,8 +58,14 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         ba = scaleImage(ba, ratio);
         Intent picture = getIntent();
         Uri myUri = Uri.parse(picture.getExtras().getString("filename"));
+        boolean isCamera = picture.getExtras().getBoolean("isCamera");
         try {
-            bg = MediaStore.Images.Media.getBitmap(getContentResolver(), myUri);
+            if(isCamera){
+                bg = MediaStore.Images.Media.getBitmap(getContentResolver(), myUri);
+            }else{
+                bg = BitmapFactory.decodeFile(myUri.toString());
+            }
+
         } catch (FileNotFoundException e) {
             Log.e("someError", Log.getStackTraceString(e));
         } catch (IOException e) {
