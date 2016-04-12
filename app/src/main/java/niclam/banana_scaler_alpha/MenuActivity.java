@@ -3,9 +3,7 @@ package niclam.banana_scaler_alpha;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 public class MenuActivity extends AppCompatActivity {
     private static final String TAG = "Menu";
@@ -17,13 +15,11 @@ public class MenuActivity extends AppCompatActivity {
     }
 
     public void startCaptureFotos(View c){
-        Log.d(TAG, "capture!");
         startActivity(new Intent(this, CameraActivity.class));
     }
 
     public void startViewFotos(View v){
-        Log.d(TAG,"view!");
-        Toast.makeText(this,"Sorry, still building", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, GalleryActivity.class));
     }
 
     @Override
