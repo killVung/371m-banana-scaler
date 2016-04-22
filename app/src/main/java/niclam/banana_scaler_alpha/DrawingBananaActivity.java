@@ -11,6 +11,7 @@ import android.graphics.PointF;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Display;
@@ -168,15 +169,27 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         }
     }
 
+    final Handler handler = new Handler();
+    Runnable mLongPressed = new Runnable(){
+        public void run() {
+            Toast.makeText(DrawingBananaActivity.this, "Long long time ago in a galaxy far far away", Toast.LENGTH_SHORT).show();
+        }
+    };
+
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_MOVE:
-
+                handler.removeCallbacks(mLongPressed);
                 PointF touchedPoint = new PointF(event.getX(),event.getY());
                 if(!isOverlap(points,touchedPoint)){
                     points.add(touchedPoint);
                 }
                 return true;
+            case MotionEvent.ACTION_UP:
+                handler.removeCallbacks(mLongPressed);
+                return true;
+            case MotionEvent.ACTION_DOWN:
+                handler.postDelayed(mLongPressed, 1000);
         }
         return true;
     }
