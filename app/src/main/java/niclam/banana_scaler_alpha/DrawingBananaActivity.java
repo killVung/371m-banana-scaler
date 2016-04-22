@@ -185,6 +185,8 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
                 PointF touchedPoint = new PointF(event.getX(),event.getY());
                 if(!isOverlap(points,touchedPoint)){
                     points.add(touchedPoint);
+                }else{
+                    displayImpossibleBanana();
                 }
                 return true;
             case MotionEvent.ACTION_UP:
@@ -192,12 +194,28 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
                 touchedPoint = new PointF(event.getX(),event.getY());
                 if(!isOverlap(points,touchedPoint)){
                     points.add(touchedPoint);
+                }else{
+                    displayImpossibleBanana();
                 }
                 return true;
             case MotionEvent.ACTION_DOWN:
                 handler.postDelayed(mLongPressed, 1000);
         }
         return true;
+    }
+
+    /** Notify user for unable to put banana on screen  **/
+    private void displayImpossibleBanana(){
+        final Toast toast = Toast.makeText(getApplicationContext(), "Unable to put banana", Toast.LENGTH_SHORT);
+        toast.show();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                toast.cancel();
+            }
+        }, 1000);
     }
 
     /** Return true if the points are overlapped **/
