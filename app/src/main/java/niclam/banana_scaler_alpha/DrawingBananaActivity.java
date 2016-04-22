@@ -150,7 +150,9 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
                         null);
 
                 for(int i = 0; i < points.size(); i++){
-                    canvas.drawBitmap(ba,points.get(i).x,points.get(i).y,null);
+                    float x = points.get(i).x - (ba.getWidth()/2);
+                    float y = points.get(i).y - (ba.getHeight()/2);
+                    canvas.drawBitmap(ba,x,y,null);
                 }
 
                 holder.unlockCanvasAndPost(canvas);
