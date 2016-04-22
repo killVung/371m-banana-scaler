@@ -187,6 +187,10 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
                 return true;
             case MotionEvent.ACTION_UP:
                 handler.removeCallbacks(mLongPressed);
+                touchedPoint = new PointF(event.getX(),event.getY());
+                if(!isOverlap(points,touchedPoint)){
+                    points.add(touchedPoint);
+                }
                 return true;
             case MotionEvent.ACTION_DOWN:
                 handler.postDelayed(mLongPressed, 1000);
