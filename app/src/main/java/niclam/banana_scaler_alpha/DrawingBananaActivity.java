@@ -233,8 +233,9 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
     /** A helper function to determine whether any given point is within any given point**/
     private boolean withinBound(PointF p1, PointF p2) {
         //Check if the point is within the boundaries of the point
-        return p2.x >= p1.x-ba.getWidth() && p2.y >= p1.y - ba.getHeight() &&
-                p2.x <= p1.x + ba.getWidth() && p2.y <= p1.y + ba.getHeight();
+        double offset = 1;
+        return p2.x >= (p1.x-ba.getWidth())*offset && p2.y >= (p1.y - ba.getHeight())*offset &&
+                p2.x <= (p1.x + ba.getWidth())*offset && p2.y <= (p1.y + ba.getHeight())*offset;
     }
 
     @Override
