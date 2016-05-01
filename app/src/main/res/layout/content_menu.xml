@@ -13,6 +13,7 @@
         android:textSize="40dp"
         android:text="Banana Scaler"
         android:textAlignment="center"
+        android:id="@+id/logo"
 
         android:shadowRadius="5"
         android:padding="15dp"
@@ -24,6 +25,7 @@
         android:layout_height="200dp"
         android:src="@drawable/bananalogo"
         android:layout_gravity="center_horizontal"
+        android:id="@+id/logoImage"
 
         />
 

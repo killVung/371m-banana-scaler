@@ -4,10 +4,16 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MenuActivity extends AppCompatActivity {
     private static final String TAG = "Menu";
@@ -19,15 +25,100 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                TextView logo = (TextView)findViewById(R.id.logo);
+                ImageView logoImage = (ImageView)findViewById(R.id.logoImage);
+                Button capture = (Button)findViewById(R.id.capture);
+                Button viewPhoto = (Button)findViewById(R.id.view);
+                slideLeft(logoImage);
+                slideLeft(logo);
+                slideLeft(capture);
+                slideLeft(viewPhoto);
+            }
+        },500);
         getPermissions();
         setContentView(R.layout.activity_menu);
     }
 
+    private void slideLeft(View v) {
+
+        Animation animationSlideInLeft = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
+        animationSlideInLeft.setDuration(900);
+        animationSlideInLeft.setAnimationListener(animationSlideInLeftListener);
+
+        v.startAnimation(animationSlideInLeft);
+        v.setVisibility(View.VISIBLE);
+    }
+
+    private void slideRight(View v) {
+
+        Animation animationSlideInLeft = AnimationUtils.loadAnimation(this, android.R.anim.slide_out_right);
+        animationSlideInLeft.setDuration(300);
+        animationSlideInLeft.setAnimationListener(animationSlideInLeftListener);
+
+        v.startAnimation(animationSlideInLeft);
+        v.setVisibility(View.VISIBLE);
+    }
+
+    Animation.AnimationListener animationSlideInLeftListener =
+            new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            };
+
     public void startCaptureFotos(View c){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                TextView logo = (TextView)findViewById(R.id.logo);
+                ImageView logoImage = (ImageView)findViewById(R.id.logoImage);
+                Button capture = (Button)findViewById(R.id.capture);
+                Button viewPhoto = (Button)findViewById(R.id.view);
+                slideRight(logoImage);
+                slideRight(logo);
+                slideRight(capture);
+                slideRight(viewPhoto);
+            }
+        },100);
+
         startActivity(new Intent(this, CameraActivity.class));
     }
 
     public void startViewFotos(View v){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                TextView logo = (TextView)findViewById(R.id.logo);
+                ImageView logoImage = (ImageView)findViewById(R.id.logoImage);
+                Button capture = (Button)findViewById(R.id.capture);
+                Button viewPhoto = (Button)findViewById(R.id.view);
+                slideRight(logoImage);
+                slideRight(logo);
+                slideRight(capture);
+                slideRight(viewPhoto);
+            }
+        },100);
         startActivity(new Intent(this, GalleryActivity.class));
     }
 
@@ -110,5 +201,5 @@ public class MenuActivity extends AppCompatActivity {
             }
         }
 
-}
+    }
 
