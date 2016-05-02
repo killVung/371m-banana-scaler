@@ -14,7 +14,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -45,7 +47,28 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         renderView = new FastRenderView(this);
         renderView.setOnTouchListener(this);
         setContentView(renderView);
+        registerForContextMenu(renderView);
+    }
 
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.setHeaderTitle("Context Menu");
+        menu.add(0, v.getId(), 0, "Save Foto");
+        menu.add(0, v.getId(), 0, "Clear nababa");
+    }
+
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getTitle() == "Save Foto") {
+            Toast.makeText(this, "Action 1 invoked", Toast.LENGTH_SHORT).show();
+        }
+        else if (item.getTitle() == "Clear nababa") {
+            Toast.makeText(this, "Action 2 invoked", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            return false;
+        }
+        return true;
     }
 
     private void setup() {
@@ -174,7 +197,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
     final Handler handler = new Handler();
     Runnable mLongPressed = new Runnable(){
         public void run() {
-            Toast.makeText(DrawingBananaActivity.this, "Long long time ago in a galaxy far far away", Toast.LENGTH_SHORT).show();
+            openContextMenu(renderView);
         }
     };
 
@@ -228,7 +251,6 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         }
         return false;
     }
-
 
     /** A helper function to determine whether any given point is within any given point**/
     private boolean withinBound(PointF p1, PointF p2) {
