@@ -7,5 +7,5 @@ So do we, that's why we decide to create this Android app just for fun, and test
 
 ### Features (Pending):
 - Take pictures of any objects, and draw bananas on it [X]
-- Use any of the previous pictures user has taken, and draw banana on it []
+- Use any of the previous pictures user has taken, and draw banana on it [X]
 - The size of the banana would change, based on the size of the object []
