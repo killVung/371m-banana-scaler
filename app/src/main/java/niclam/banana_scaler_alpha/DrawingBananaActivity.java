@@ -36,6 +36,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
     Bitmap bg;
     List <PointF> points;
     Point display;
+    Bitmap mutableBg;
 
     public void onCreate(Bundle savedInstanceState) {
         setup();
@@ -60,10 +61,13 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
 
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle() == "Save Foto") {
-            Toast.makeText(this, "Action 1 invoked", Toast.LENGTH_SHORT).show();
+            CapturePhotoUtils.insertImage(getContentResolver(),mutableBg,"Banana Scaler", "");
+//            MediaStore.Images.Media.insertImage(getContentResolver(), mutableBg, "imagey.jpg", "Description");
+            Toast.makeText(this, "Imagine saved", Toast.LENGTH_SHORT).show();
         }
         else if (item.getTitle() == "Clear nababa") {
-            Toast.makeText(this, "Action 2 invoked", Toast.LENGTH_SHORT).show();
+            points.clear();
+            Toast.makeText(this, "cleared", Toast.LENGTH_SHORT).show();
         }
         else {
             return false;
@@ -167,6 +171,8 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
                 Canvas canvas = holder.lockCanvas();
                 Display currentDisplay = getWindowManager().getDefaultDisplay();
                 currentDisplay.getSize(display);
+                mutableBg = Bitmap.createScaledBitmap(bg,display.x, display.y,true);
+                Canvas bgCanvas = new Canvas(mutableBg);
                 canvas.drawBitmap(bg,
                         null,
                         new Rect(0,0,display.x,display.y),
@@ -176,6 +182,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
                     float x = points.get(i).x - (ba.getWidth()/2);
                     float y = points.get(i).y - (ba.getHeight()/2);
                     canvas.drawBitmap(ba,x,y,null);
+                    bgCanvas.drawBitmap(ba,x,y,null);
                 }
 
                 holder.unlockCanvasAndPost(canvas);
