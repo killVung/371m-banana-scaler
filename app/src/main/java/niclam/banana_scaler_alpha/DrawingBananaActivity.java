@@ -31,12 +31,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DrawingBananaActivity extends Activity implements View.OnTouchListener {
+    final Handler handler = new Handler();
     FastRenderView renderView;
     Bitmap ba;
     Bitmap bg;
-    List <PointF> points;
+    List<PointF> points;
     Point display;
     Bitmap mutableBg;
+    Runnable mLongPressed = new Runnable() {
+        public void run() {
+            openContextMenu(renderView);
+        }
+    };
 
     public void onCreate(Bundle savedInstanceState) {
         setup();
@@ -61,15 +67,13 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
 
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle() == "Save Foto") {
-            CapturePhotoUtils.insertImage(getContentResolver(),mutableBg,"Banana Scaler", "");
+            CapturePhotoUtils.insertImage(getContentResolver(), mutableBg, Long.toString(System.currentTimeMillis()), "");
 //            MediaStore.Images.Media.insertImage(getContentResolver(), mutableBg, "imagey.jpg", "Description");
             Toast.makeText(this, "Imagine saved", Toast.LENGTH_SHORT).show();
-        }
-        else if (item.getTitle() == "Clear nababa") {
+        } else if (item.getTitle() == "Clear nababa") {
             points.clear();
             Toast.makeText(this, "cleared", Toast.LENGTH_SHORT).show();
-        }
-        else {
+        } else {
             return false;
         }
         return true;
@@ -88,9 +92,9 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         Uri myUri = Uri.parse(picture.getExtras().getString("filename"));
         boolean isCamera = picture.getExtras().getBoolean("isCamera");
         try {
-            if(isCamera){
+            if (isCamera) {
                 bg = MediaStore.Images.Media.getBitmap(getContentResolver(), myUri);
-            }else{
+            } else {
                 bg = BitmapFactory.decodeFile(myUri.toString());
             }
 
@@ -104,7 +108,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         points = new LinkedList<>();
     }
 
-    private Bitmap scaleImage(Bitmap image, float ratio){
+    private Bitmap scaleImage(Bitmap image, float ratio) {
         int width = Math.round((float) ratio * ba.getWidth());
         int height = Math.round((float) ratio * ba.getHeight());
         return Bitmap.createScaledBitmap(image, width,
@@ -121,6 +125,80 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         renderView.pause();
     }
 
+    public boolean onTouch(View v, MotionEvent event) {
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+                handler.removeCallbacks(mLongPressed);
+                PointF touchedPoint = new PointF(event.getX(), event.getY());
+                if (!isOverlap(points, touchedPoint)) {
+                    points.add(touchedPoint);
+                }
+                return true;
+            case MotionEvent.ACTION_UP:
+                handler.removeCallbacks(mLongPressed);
+                touchedPoint = new PointF(event.getX(), event.getY());
+                if (!isOverlap(points, touchedPoint)) {
+                    points.add(touchedPoint);
+                } else {
+                    displayImpossibleBanana();
+                }
+                return true;
+            case MotionEvent.ACTION_DOWN:
+                handler.postDelayed(mLongPressed, 1000);
+        }
+        return true;
+    }
+
+    /**
+     * Notify user for unable to put banana on screen
+     **/
+    private void displayImpossibleBanana() {
+        final Toast toast = Toast.makeText(getApplicationContext(), "Unable to put banana", Toast.LENGTH_SHORT);
+        toast.show();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                toast.cancel();
+            }
+        }, 1000);
+    }
+
+    /**
+     * Return true if the points are overlapped
+     **/
+    private boolean isOverlap(List<PointF> points, PointF point) {
+        /* Traverse the list of points, return true if the point */
+        for (int i = 0; i < points.size(); i++) {
+            if (withinBound(points.get(i), point)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * A helper function to determine whether any given point is within any given point
+     **/
+    private boolean withinBound(PointF p1, PointF p2) {
+        //Check if the point is within the boundaries of the point
+        double offset = 1;
+        return p2.x >= (p1.x - ba.getWidth()) * offset && p2.y >= (p1.y - ba.getHeight()) * offset &&
+                p2.x <= (p1.x + ba.getWidth()) * offset && p2.y <= (p1.y + ba.getHeight()) * offset;
+    }
+
+    @Override
+    public void onBackPressed() {
+        Bundle bundle = new Bundle();
+        Intent mIntent = new Intent();
+        mIntent.putExtras(bundle);
+        setResult(RESULT_CANCELED, mIntent);
+        super.onBackPressed();
+        finish();
+
+    }
+
     class FastRenderView extends SurfaceView implements Runnable {
         Thread renderThread = null;
         SurfaceHolder holder;
@@ -129,31 +207,6 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         public FastRenderView(Context context) {
             super(context);
             holder = getHolder();
-
-            /** We may need this code to get our images **/
-
-//            try {
-//                AssetManager assetManager = context.getAssets();
-//                InputStream inputStream = assetManager.open("bobrgb888.png");
-////                bob565 = BitmapFactory.decodeStream(inputStream);
-////                inputStream.close();
-////                Log.d("BitmapText",
-////                        "bobrgb888.png format: " + bob565.getConfig());
-//
-//                inputStream = assetManager.open("bobargb8888.png");
-//                BitmapFactory.Options options = new BitmapFactory.Options();
-//                options.inPreferredConfig = Bitmap.Config.ARGB_4444;
-////                bob4444 = BitmapFactory
-////                        .decodeStream(inputStream, null, options);
-////                inputStream.close();
-////                Log.d("BitmapText",
-////                        "bobargb8888.png format: " + bob4444.getConfig());
-//
-//            } catch (IOException e) {
-//                // silently ignored, bad coder monkey, baaad!
-//            } finally {
-//                // we should really close our input streams here.
-//            }
         }
 
         public void resume() {
@@ -171,18 +224,18 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
                 Canvas canvas = holder.lockCanvas();
                 Display currentDisplay = getWindowManager().getDefaultDisplay();
                 currentDisplay.getSize(display);
-                mutableBg = Bitmap.createScaledBitmap(bg,display.x, display.y,true);
+                mutableBg = Bitmap.createScaledBitmap(bg, display.x, display.y, true);
                 Canvas bgCanvas = new Canvas(mutableBg);
                 canvas.drawBitmap(bg,
                         null,
-                        new Rect(0,0,display.x,display.y),
+                        new Rect(0, 0, display.x, display.y),
                         null);
 
-                for(int i = 0; i < points.size(); i++){
-                    float x = points.get(i).x - (ba.getWidth()/2);
-                    float y = points.get(i).y - (ba.getHeight()/2);
-                    canvas.drawBitmap(ba,x,y,null);
-                    bgCanvas.drawBitmap(ba,x,y,null);
+                for (int i = 0; i < points.size(); i++) {
+                    float x = points.get(i).x - (ba.getWidth() / 2);
+                    float y = points.get(i).y - (ba.getHeight() / 2);
+                    canvas.drawBitmap(ba, x, y, null);
+                    bgCanvas.drawBitmap(ba, x, y, null);
                 }
 
                 holder.unlockCanvasAndPost(canvas);
@@ -199,82 +252,5 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
                 }
             }
         }
-    }
-
-    final Handler handler = new Handler();
-    Runnable mLongPressed = new Runnable(){
-        public void run() {
-            openContextMenu(renderView);
-        }
-    };
-
-    public boolean onTouch(View v, MotionEvent event) {
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_MOVE:
-                handler.removeCallbacks(mLongPressed);
-                PointF touchedPoint = new PointF(event.getX(),event.getY());
-                if(!isOverlap(points,touchedPoint)){
-                    points.add(touchedPoint);
-                }else{
-                    displayImpossibleBanana();
-                }
-                return true;
-            case MotionEvent.ACTION_UP:
-                handler.removeCallbacks(mLongPressed);
-                touchedPoint = new PointF(event.getX(),event.getY());
-                if(!isOverlap(points,touchedPoint)){
-                    points.add(touchedPoint);
-                }else{
-                    displayImpossibleBanana();
-                }
-                return true;
-            case MotionEvent.ACTION_DOWN:
-                handler.postDelayed(mLongPressed, 1000);
-        }
-        return true;
-    }
-
-    /** Notify user for unable to put banana on screen  **/
-    private void displayImpossibleBanana(){
-        final Toast toast = Toast.makeText(getApplicationContext(), "Unable to put banana", Toast.LENGTH_SHORT);
-        toast.show();
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                toast.cancel();
-            }
-        }, 1000);
-    }
-
-    /** Return true if the points are overlapped **/
-    private boolean isOverlap(List<PointF> points, PointF point) {
-        /* Traverse the list of points, return true if the point */
-        for(int i = 0; i < points.size(); i++){
-            if(withinBound(points.get(i),point)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /** A helper function to determine whether any given point is within any given point**/
-    private boolean withinBound(PointF p1, PointF p2) {
-        //Check if the point is within the boundaries of the point
-        double offset = 1;
-        return p2.x >= (p1.x-ba.getWidth())*offset && p2.y >= (p1.y - ba.getHeight())*offset &&
-                p2.x <= (p1.x + ba.getWidth())*offset && p2.y <= (p1.y + ba.getHeight())*offset;
-    }
-
-    @Override
-    public void onBackPressed() {
-        Bundle bundle = new Bundle();
-        Intent mIntent = new Intent();
-        mIntent.putExtras(bundle);
-        setResult(RESULT_CANCELED, mIntent);
-        super.onBackPressed();
-        finish();
-
     }
 }

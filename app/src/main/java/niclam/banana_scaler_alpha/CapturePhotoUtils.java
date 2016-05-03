@@ -41,8 +41,10 @@ public class CapturePhotoUtils {
         values.put(Images.Media.DESCRIPTION, description);
         values.put(Images.Media.MIME_TYPE, "image/jpeg");
         // Add the date meta data to ensure the image is added at the front of the gallery
-        values.put(Images.Media.DATE_ADDED, System.currentTimeMillis());
-        values.put(Images.Media.DATE_TAKEN, System.currentTimeMillis());
+        Long currentTime = System.currentTimeMillis();
+        values.put(Images.Media.DATE_TAKEN, currentTime);
+        values.put(Images.Media.DATE_ADDED, currentTime/1000);
+        values.put(Images.Media.DATE_MODIFIED, currentTime/1000);
 
         Uri url = null;
         String stringUrl = null;    /* value to be returned */
