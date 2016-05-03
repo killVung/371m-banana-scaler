@@ -170,8 +170,15 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         currentDisplay.getSize(display);
         ratio = Math.max(
                 (float) display.x/(ba.getWidth()*20),
-                (float) display.y/(ba.getHeight()*20));
+                (float) display.y/(ba.getHeight())*20);
+//        ratio *= Math.abs(distance);
+//        if (ratio > 1000) {
+//            ratio = 1000f;
+//        } else if (ratio < 0.01) {
+//            ratio = 0.01f;
+//        }
 
+//        Toast.makeText(DrawingBananaActivity.this, Double.toString(distance), Toast.LENGTH_SHORT).show();
         ba = scaleImage(ba, ratio);
         ratio = 1.0f;
         origin_ba = ba.copy(Bitmap.Config.ARGB_8888, true);
