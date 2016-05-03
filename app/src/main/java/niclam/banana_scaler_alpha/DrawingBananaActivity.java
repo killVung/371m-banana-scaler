@@ -43,9 +43,11 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
     List<PointF> points;
     Point display;
     Bitmap mutableBg;
+    boolean context_open;
     Runnable mLongPressed = new Runnable() {
         public void run() {
             openContextMenu(renderView);
+            context_open = true;
         }
     };
     private float ratio;
@@ -191,7 +193,11 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
                 if (!isOverlap(points, touchedPoint)) {
                     points.add(touchedPoint);
                 } else {
-                    displayImpossibleBanana();
+                    if (!context_open) {
+                        displayImpossibleBanana();
+                    } else {
+                        context_open = false;
+                    }
                 }
                 return true;
             case MotionEvent.ACTION_DOWN:
