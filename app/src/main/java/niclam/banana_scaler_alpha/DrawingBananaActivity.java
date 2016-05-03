@@ -273,7 +273,6 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         setResult(RESULT_CANCELED, mIntent);
         super.onBackPressed();
         finish();
-
     }
 
     class FastRenderView extends SurfaceView implements Runnable {

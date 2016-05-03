@@ -959,6 +959,8 @@ public class Camera2BasicFragment extends Fragment
                         btn_click = 0;
                         Intent proceed = new Intent(getActivity(), CameraActivity.class);
                         proceed.putExtra("distance", lungy);
+                        butter = (Button) view.findViewById(R.id.Firstbtn);
+                        butter.setText("Click me");
                         startActivity(proceed);
                         break;
                 }
