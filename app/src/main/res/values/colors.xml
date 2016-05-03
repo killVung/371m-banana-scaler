@@ -5,5 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorKhaki">#F0E68C</color>
     <color name="colorText">#FFEEDF</color>
-
+    <color name="control_background">#cc4285f4</color>
 </resources>

@@ -98,7 +98,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         }, 100);
 
-        startActivity(new Intent(this, CameraActivity.class));
+        startActivity(new Intent(this, PreviewCameraActivity.class));
     }
 
     public void startViewFotos(View v) {
