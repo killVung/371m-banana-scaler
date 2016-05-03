@@ -72,6 +72,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         menu.add(0, v.getId(), 0, "Save Foto");
         menu.add(0, v.getId(), 0, "Clear banana");
         menu.add(0, v.getId(), 0, "Scale banana");
+        menu.add(0, v.getId(), 0, "Count banana");
     }
 
     public boolean onContextItemSelected(MenuItem item) {
@@ -81,6 +82,8 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         } else if (item.getTitle() == "Clear banana") {
             points.clear();
             Toast.makeText(this, "cleared", Toast.LENGTH_SHORT).show();
+        } else if (item.getTitle() == "Count banana") {
+            Toast.makeText(this, "There are " + points.size() + " banana on screen", Toast.LENGTH_SHORT).show();
         } else if (item.getTitle() == "Scale banana") {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Enter the % of banana scale size (max:1000)");
@@ -147,41 +150,9 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
     private void scaleBanana() {
         Display currentDisplay = getWindowManager().getDefaultDisplay();
         currentDisplay.getSize(display);
-
-//        while (distance < 0.01) {
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setTitle("Looks like the distance is too small\nPlease enter your estimate distance here");
-//
-//            // Set up the input
-//            final EditText input = new EditText(this);
-//            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-//            input.setInputType(InputType.TYPE_CLASS_NUMBER);
-//            builder.setView(input);
-//
-//            // Set up the buttons
-//            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    distance = Double.parseDouble(input.getText().toString());
-//                }
-//            });
-//
-//            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    dialog.cancel();
-//                }
-//            });
-//
-//            builder.show();
-//        }
-
         ratio = Math.max(
-                (float) display.x/(ba.getWidth()*10),
-                (float) display.y/(ba.getHeight()*10));
-//        ratio /= distance;
-
-        Toast.makeText(DrawingBananaActivity.this, Double.toString(distance), Toast.LENGTH_SHORT).show();
+                (float) display.x/(ba.getWidth()*20),
+                (float) display.y/(ba.getHeight()*20));
 
         ba = scaleImage(ba, ratio);
         ratio = 1.0f;
