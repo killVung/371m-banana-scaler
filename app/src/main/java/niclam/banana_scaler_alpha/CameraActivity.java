@@ -50,14 +50,9 @@ public class CameraActivity extends AppCompatActivity {
         if(resultCode == RESULT_CANCELED){
             finish();
         }else{
-            fuckingCheckPermission();
             startActivity(intent);
             finish();
         }
-
-    }
-    /** Fucking check the permission to make sure the fucking READ DISK is accessible on fucking Android 6.0 **/
-    private void fuckingCheckPermission() {
 
     }
 
