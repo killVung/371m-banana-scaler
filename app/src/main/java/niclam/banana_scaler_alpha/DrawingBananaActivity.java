@@ -1,7 +1,9 @@
 package niclam.banana_scaler_alpha;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Display;
@@ -23,6 +26,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.FileNotFoundException;
@@ -34,6 +38,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
     final Handler handler = new Handler();
     FastRenderView renderView;
     Bitmap ba;
+    Bitmap origin_ba;
     Bitmap bg;
     List<PointF> points;
     Point display;
@@ -43,6 +48,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
             openContextMenu(renderView);
         }
     };
+    private float ratio;
 
     public void onCreate(Bundle savedInstanceState) {
         setup();
@@ -55,6 +61,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         renderView.setOnTouchListener(this);
         setContentView(renderView);
         registerForContextMenu(renderView);
+        scaleBanana();
     }
 
     public void onCreateContextMenu(ContextMenu menu, View v,
@@ -62,17 +69,48 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.setHeaderTitle("Context Menu");
         menu.add(0, v.getId(), 0, "Save Foto");
-        menu.add(0, v.getId(), 0, "Clear nababa");
+        menu.add(0, v.getId(), 0, "Clear banana");
+        menu.add(0, v.getId(), 0, "Scale banana");
     }
 
     public boolean onContextItemSelected(MenuItem item) {
         if (item.getTitle() == "Save Foto") {
             CapturePhotoUtils.insertImage(getContentResolver(), mutableBg, Long.toString(System.currentTimeMillis()), "");
-//            MediaStore.Images.Media.insertImage(getContentResolver(), mutableBg, "imagey.jpg", "Description");
-            Toast.makeText(this, "Imagine saved", Toast.LENGTH_SHORT).show();
-        } else if (item.getTitle() == "Clear nababa") {
+            Toast.makeText(this, "Image saved", Toast.LENGTH_SHORT).show();
+        } else if (item.getTitle() == "Clear banana") {
             points.clear();
             Toast.makeText(this, "cleared", Toast.LENGTH_SHORT).show();
+        } else if (item.getTitle() == "Scale banana") {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Enter the % of banana scale size");
+
+            // Set up the input
+            final EditText input = new EditText(this);
+            // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+            input.setInputType(InputType.TYPE_CLASS_NUMBER);
+            builder.setView(input);
+
+            // Set up the buttons
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    float scale_to = Float.parseFloat(input.getText().toString());
+                    Log.e("Comeon", "1:" + Float.toString(scale_to));
+                    Log.e("Comeon", "2:" + Float.toString(ratio));
+                    ratio = ratio*scale_to/100;
+                    Log.e("Comeon", "3:" + Float.toString(ratio));
+                    ba = scaleImage(origin_ba, ratio);
+                    points.clear();
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+
+            builder.show();
         } else {
             return false;
         }
@@ -83,11 +121,6 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         /*  Banana and the Background  */
         ba = BitmapFactory.decodeResource(getResources(), R.drawable.banana);
 
-        float ratio = Math.min(
-                (float) 100 / ba.getWidth(),
-                (float) 100 / ba.getHeight());
-
-        ba = scaleImage(ba, ratio);
         Intent picture = getIntent();
         Uri myUri = Uri.parse(picture.getExtras().getString("filename"));
         boolean isCamera = picture.getExtras().getBoolean("isCamera");
@@ -109,9 +142,22 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         points = new LinkedList<>();
     }
 
+    private void scaleBanana() {
+        Display currentDisplay = getWindowManager().getDefaultDisplay();
+        currentDisplay.getSize(display);
+
+        ratio = Math.max(
+                (float) display.x/(ba.getWidth()*20),
+                (float) display.y/(ba.getHeight()*20));
+
+        ba = scaleImage(ba, ratio);
+        ratio = 1.0f;
+        origin_ba = ba.copy(Bitmap.Config.ARGB_8888, true);
+    }
+
     private Bitmap scaleImage(Bitmap image, float ratio) {
-        int width = Math.round((float) ratio * ba.getWidth());
-        int height = Math.round((float) ratio * ba.getHeight());
+        int width = Math.round((float) ratio * image.getWidth());
+        int height = Math.round((float) ratio * image.getHeight());
         return Bitmap.createScaledBitmap(image, width,
                 height, false);
     }
