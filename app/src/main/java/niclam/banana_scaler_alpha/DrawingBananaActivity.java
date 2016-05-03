@@ -95,7 +95,8 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
             if (isCamera) {
                 bg = MediaStore.Images.Media.getBitmap(getContentResolver(), myUri);
             } else {
-                bg = BitmapFactory.decodeFile(myUri.toString());
+                Bitmap hardcopy = BitmapFactory.decodeFile(myUri.toString());
+                bg = hardcopy.copy(Bitmap.Config.ARGB_8888, true);
             }
 
         } catch (FileNotFoundException e) {
