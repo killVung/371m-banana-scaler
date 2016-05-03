@@ -29,6 +29,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -73,6 +74,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         menu.add(0, v.getId(), 0, "Clear banana");
         menu.add(0, v.getId(), 0, "Scale banana");
         menu.add(0, v.getId(), 0, "Count banana");
+        menu.add(0, v.getId(), 0, "Share banana");
     }
 
     public boolean onContextItemSelected(MenuItem item) {
@@ -84,7 +86,21 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
             Toast.makeText(this, "cleared", Toast.LENGTH_SHORT).show();
         } else if (item.getTitle() == "Count banana") {
             Toast.makeText(this, "There are " + points.size() + " banana on screen", Toast.LENGTH_SHORT).show();
-        } else if (item.getTitle() == "Scale banana") {
+        }else if(item.getTitle() == "Share banana"){
+            Log.d("TAG","Click Banana");
+
+            final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("image/jpg");
+
+//            final File photoFile = new File(getFilesDir(), "foo.jpg");
+            String pictureURL = CapturePhotoUtils.insertImage(getContentResolver(), mutableBg, Long.toString(System.currentTimeMillis()), "");
+            Uri image = Uri.parse(pictureURL);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, image);
+            startActivity(Intent.createChooser(shareIntent, "Share image using"));
+
+
+
+        }else if (item.getTitle() == "Scale banana") {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Enter the % of banana scale size (max:1000)");
 
