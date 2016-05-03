@@ -76,6 +76,7 @@ public class GalleryActivity extends AppCompatActivity {
             Intent intent = new Intent(getBaseContext(), DrawingBananaActivity.class);
             intent.putExtra("filename", selectedImagePath);
             intent.putExtra("isCamera", false);
+            intent.putExtra("distance", 0d);
             fuckingCheckPermission();
             startActivity(intent);
             finish();

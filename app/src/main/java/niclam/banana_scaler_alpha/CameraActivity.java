@@ -19,6 +19,7 @@ public class CameraActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1;
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 2;
 
+    double distance;
     private File getTempFile(Context context){
         //it will return /sdcard/image.tmp
         final File path = new File( Environment.getExternalStorageDirectory(), context.getPackageName() );
@@ -35,6 +36,15 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera);
         Toast.makeText(this,"Please capture the image you want to draw",Toast.LENGTH_SHORT).show();
 
+        if(savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                distance = 0f;
+            } else {
+                distance = extras.getDouble("distance");
+            }
+        }
+
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(getTempFile(getBaseContext())));
         startActivityForResult(intent, 0);
@@ -47,6 +57,7 @@ public class CameraActivity extends AppCompatActivity {
         Intent intent = new Intent(getBaseContext(), DrawingBananaActivity.class);
         intent.putExtra("filename", Uri.fromFile(file).toString());
         intent.putExtra("isCamera", true);
+        intent.putExtra("distance", distance);
         if(resultCode == RESULT_CANCELED){
             finish();
         }else{

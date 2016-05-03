@@ -24,6 +24,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
@@ -61,6 +62,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
@@ -91,6 +93,8 @@ public class Camera2BasicFragment extends Fragment
     final float[] mRotationMatrix    = new float[9];
     final float[] mFirstOrientation = new float[3];
     final float[] mDiffOrientation = new float[3];
+    int btn_click;
+    double lungy;
 
     static {
         ORIENTATIONS.append(Surface.ROTATION_0, 90);
@@ -456,13 +460,13 @@ public class Camera2BasicFragment extends Fragment
                 SensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(mEventListener, sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD),
                 SensorManager.SENSOR_DELAY_NORMAL);
+        btn_click = 0;
         return inflater.inflate(R.layout.fragment_camera2_basic, container, false);
     }
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.Firstbtn).setOnClickListener(this);
-        view.findViewById(R.id.Secondbtn).setOnClickListener(this);
         view.findViewById(R.id.info).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     }
@@ -923,27 +927,43 @@ public class Camera2BasicFragment extends Fragment
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.Firstbtn: {
-                SensorManager.getRotationMatrix(mRotationMatrix, null, mValuesAccel, mValuesMagnet);
-                SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
-                final CharSequence test;
-                for (int i = 0; i < 3; i++) {
-                    mFirstOrientation[i] = Math.abs(mValuesOrientation[i]);
+                btn_click++;
+                switch (btn_click) {
+                    case 1:
+                        SensorManager.getRotationMatrix(mRotationMatrix, null, mValuesAccel, mValuesMagnet);
+                        SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
+                        for (int i = 0; i < 3; i++) {
+                            mFirstOrientation[i] = Math.abs(mValuesOrientation[i]);
+                        }
+                        Button butter = (Button) view.findViewById(R.id.Firstbtn);
+                        butter.setText("Move 1 banana away\n" +
+                                "click me again");
+                        break;
+                    case 2:
+                        SensorManager.getRotationMatrix(mRotationMatrix, null, mValuesAccel, mValuesMagnet);
+                        SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
+                        final CharSequence test;
+                        float maxOri = 0f;
+                        for (int i = 0; i < 3; i++) {
+                            mDiffOrientation[i] = Math.abs(mFirstOrientation[i]- Math.abs(mValuesOrientation[i]));
+                            maxOri = Math.max(maxOri, mDiffOrientation[i]);
+                        }
+                        lungy = Math.tan((float) Math.PI/2 -maxOri);
+                        test = "The Angle is " + Float.toString(maxOri*57) + " and distance is " + Double.toString(lungy) + " banana length ";
+                        showToast(test.toString());
+                        butter = (Button) view.findViewById(R.id.Firstbtn);
+                        butter.setText("Got the distance\nmove back and click again");
+
+                        break;
+                    case 3:
+                        btn_click = 0;
+                        Intent proceed = new Intent(getActivity(), CameraActivity.class);
+                        proceed.putExtra("distance", lungy);
+                        startActivity(proceed);
+                        break;
                 }
-                showToast("敵將! 擊潰!");
-                break;
-            }
-            case R.id.Secondbtn: {
-                SensorManager.getRotationMatrix(mRotationMatrix, null, mValuesAccel, mValuesMagnet);
-                SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
-                final CharSequence test;
-                float maxOri = 0f;
-                for (int i = 0; i < 3; i++) {
-                    mDiffOrientation[i] = Math.abs(mFirstOrientation[i]- Math.abs(mValuesOrientation[i]));
-                    maxOri = Math.max(maxOri, mDiffOrientation[i]);
-                }
-                double lungy = Math.tan((float) Math.PI/2 -maxOri);
-                test = "The Angle is " + Float.toString(maxOri*57) + " and distance is " + Double.toString(lungy) + " banana length ";
-                showToast(test.toString());
+
+
                 break;
             }
             case R.id.info: {

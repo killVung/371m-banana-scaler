@@ -49,6 +49,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         }
     };
     private float ratio;
+    private double distance;
 
     public void onCreate(Bundle savedInstanceState) {
         setup();
@@ -124,6 +125,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         Intent picture = getIntent();
         Uri myUri = Uri.parse(picture.getExtras().getString("filename"));
         boolean isCamera = picture.getExtras().getBoolean("isCamera");
+        distance = picture.getExtras().getDouble("distance");
         try {
             if (isCamera) {
                 bg = MediaStore.Images.Media.getBitmap(getContentResolver(), myUri);
@@ -149,6 +151,8 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         ratio = Math.max(
                 (float) display.x/(ba.getWidth()*20),
                 (float) display.y/(ba.getHeight()*20));
+
+        Toast.makeText(DrawingBananaActivity.this, Double.toString(distance), Toast.LENGTH_SHORT).show();
 
         ba = scaleImage(ba, ratio);
         ratio = 1.0f;
