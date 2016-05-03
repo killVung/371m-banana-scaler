@@ -83,7 +83,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
             Toast.makeText(this, "cleared", Toast.LENGTH_SHORT).show();
         } else if (item.getTitle() == "Scale banana") {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Enter the % of banana scale size");
+            builder.setTitle("Enter the % of banana scale size (max:1000)");
 
             // Set up the input
             final EditText input = new EditText(this);
@@ -95,7 +95,10 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    float scale_to = Float.parseFloat(input.getText().toString());
+                    float scale_to = Math.abs(Float.parseFloat(input.getText().toString()));
+                    if (scale_to > 1000) {
+                        scale_to = 1000;
+                    }
                     ratio = ratio*scale_to/100;
                     ba = scaleImage(origin_ba, ratio);
                     points.clear();
@@ -213,9 +216,9 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
                 return true;
             case MotionEvent.ACTION_UP:
                 touchedPoint = new PointF(event.getX(), event.getY());
+                handler.removeCallbacks(mLongPressed);
                 if (!isOverlap(points, touchedPoint)) {
                     points.add(touchedPoint);
-                    handler.removeCallbacks(mLongPressed);
                 } else {
                     displayImpossibleBanana();
                 }
