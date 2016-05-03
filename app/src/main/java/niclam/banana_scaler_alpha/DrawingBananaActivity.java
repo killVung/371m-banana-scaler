@@ -29,7 +29,6 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -169,16 +168,17 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         Display currentDisplay = getWindowManager().getDefaultDisplay();
         currentDisplay.getSize(display);
         ratio = Math.max(
-                (float) display.x/(ba.getWidth()*20),
-                (float) display.y/(ba.getHeight())*20);
-//        ratio *= Math.abs(distance);
-//        if (ratio > 1000) {
-//            ratio = 1000f;
-//        } else if (ratio < 0.01) {
-//            ratio = 0.01f;
-//        }
+                (float) display.x/(ba.getWidth()),
+                (float) display.y/(ba.getHeight()));
 
-//        Toast.makeText(DrawingBananaActivity.this, Double.toString(distance), Toast.LENGTH_SHORT).show();
+        float tmp_ratio = 1/(float) distance;
+        if (tmp_ratio < 0.01) {
+            ratio = 0.01f;
+        } else if (tmp_ratio < 3) {
+            ratio = tmp_ratio;
+        }
+
+
         ba = scaleImage(ba, ratio);
         ratio = 1.0f;
         origin_ba = ba.copy(Bitmap.Config.ARGB_8888, true);

@@ -9,13 +9,9 @@
     <string name="request_permission">This sample needs camera permission.</string>
     <string name="camera_error">This device doesn\'t support Camera2 API.</string>
     <string name="intro_message">
-        <![CDATA[
-
-
-            This sample demonstrates the basic use of Camera2 API. Check the source code to see how
-            you can display camera preview and take pictures.
-
-
-        ]]>
+            Click once to record original position
+            Move away 1 banana length, tilt your camera back
+            to where you point at first, click again
+            Get the distance and proceed to take the real photo to use
     </string>
 </resources>
