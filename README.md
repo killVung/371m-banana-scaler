@@ -5,13 +5,16 @@ An android app that let user to draw bananas on the image, for scaling purpose.
 There are a lot of apps out there, that allow user to scale any given objects with bananas, in order to jump on the bandwagon of [Banana for scale meme] (http://knowyourmeme.com/memes/banana-for-scale)
 So do we, that's why we decide to create this Android app just for fun, and testify the power of a mobile device.
 
-### Features
-- Take pictures of any objects, and draw bananas on it [X]
-- Use any of the previous pictures user has taken, and draw banana on it [X]
+### Features:
+- Take pictures of any objects, and draw bananas on it
+- Use any of the previous pictures user has taken, and draw banana on it
 - Scale the actual size of the banana 
 - Measure the correct ratio of the banana to the object
+ 
 
 
+
+### Note:
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
