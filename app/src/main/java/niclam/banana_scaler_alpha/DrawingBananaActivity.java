@@ -152,6 +152,7 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
             } else {
                 Bitmap hardcopy = BitmapFactory.decodeFile(myUri.toString());
                 bg = hardcopy.copy(Bitmap.Config.ARGB_8888, true);
+                distance = 0.5f;
             }
 
         } catch (FileNotFoundException e) {
@@ -168,16 +169,19 @@ public class DrawingBananaActivity extends Activity implements View.OnTouchListe
         Display currentDisplay = getWindowManager().getDefaultDisplay();
         currentDisplay.getSize(display);
         ratio = Math.max(
-                (float) display.x/(ba.getWidth()),
-                (float) display.y/(ba.getHeight()));
+                (float) display.x/(ba.getWidth()*10),
+                (float) display.y/(ba.getHeight()*10));
 
-        float tmp_ratio = 1/(float) distance;
-        if (tmp_ratio < 0.01) {
-            ratio = 0.01f;
-        } else if (tmp_ratio < 3) {
-            ratio = tmp_ratio;
+        if (distance > 1) {
+            ratio = ratio / (float) distance;
+        } else {
+            ratio = (float) (2 - distance);
         }
-
+        if (ratio < 0.01f) {
+            ratio = 0.01f;
+        } else if (ratio > 3) {
+            ratio = 3;
+        }
 
         ba = scaleImage(ba, ratio);
         ratio = 1.0f;

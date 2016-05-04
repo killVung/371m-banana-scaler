@@ -933,7 +933,7 @@ public class Camera2BasicFragment extends Fragment
                         SensorManager.getRotationMatrix(mRotationMatrix, null, mValuesAccel, mValuesMagnet);
                         SensorManager.getOrientation(mRotationMatrix, mValuesOrientation);
                         for (int i = 0; i < 3; i++) {
-                            mFirstOrientation[i] = Math.abs(mValuesOrientation[i]);
+                            mFirstOrientation[i] = mValuesOrientation[i];
                         }
                         Button butter = (Button) view.findViewById(R.id.Firstbtn);
                         butter.setText("Move 1 banana away\n" +
@@ -945,11 +945,11 @@ public class Camera2BasicFragment extends Fragment
                         final CharSequence test;
                         float maxOri = 0f;
                         for (int i = 0; i < 3; i++) {
-                            mDiffOrientation[i] = Math.abs(mFirstOrientation[i]- Math.abs(mValuesOrientation[i]));
+                            mDiffOrientation[i] = Math.abs(mFirstOrientation[i]- mValuesOrientation[i]) % ((float) Math.PI/2);
                             maxOri = Math.max(maxOri, mDiffOrientation[i]);
                         }
                         lungy = Math.tan((float) Math.PI/2 -maxOri);
-                        test = "The Angle is " + Float.toString(maxOri*57) + " and distance is " + Double.toString(lungy) + " banana length ";
+                        test = "The Angle is " + Float.toString(maxOri*57.2958f) + " and distance is " + Double.toString(lungy) + " banana length ";
                         showToast(test.toString());
                         butter = (Button) view.findViewById(R.id.Firstbtn);
                         butter.setText("Got the distance\nmove back and click again");
